@@ -15,12 +15,10 @@ var indexRouter = require('./routes/index')
 var app = express();
 app.use(bodyParser.json());
 const corsOptions = {
-  origin: 'http://localhost:5173', 
+  origin: 'http://localhost:5174', 
 };
 app.use(cors(corsOptions));
-// Middleware and routes setup here...
 
-// Start your application after database setup
 (async () => {
   try {
     await sequelize.authenticate();

@@ -20,7 +20,10 @@ const User = sequelize.define('Users', {
     autoIncrement: true,
   },
   password: Sequelize.STRING,
-  email: Sequelize.STRING,
+  email: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
   firstName: Sequelize.STRING,
   lastName: Sequelize.STRING,
 });

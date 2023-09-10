@@ -4,7 +4,6 @@ var router = express.Router();
 var { sequelize, setupDatabase, User, Note, getTableNames } = require('../databaseService'); // Import the sequelize instance
 const Sequelize = require('sequelize');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
@@ -172,6 +171,55 @@ router.put('/db-manipulator/update/content', async (req, res, next) => {
     return res.status(200).json(updatedRecord);
   } catch (error) {
     console.error('Error updating record:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/register', async (req, res, next) => {
+  try {
+    const { email, password, repassword, firstname, lastname } = req.body.data;
+
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+
+    if (password !== repassword) {
+      return res.status(400).json({ error: 'Passwords do not match' });
+    }
+
+    const newUser = await User.create({
+      email,
+      password,
+      firstname,
+      lastname,
+    });
+
+    return res.status(201).json(newUser);
+  } catch (error) {
+    console.error('Error registering user:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/login', async (req, res, next) => {
+  try {
+    const { email, password } = req.body.data;
+    console.log(email, password)
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (user.password !== password) {
+      return res.status(401).json({ error: 'Invalid password' });
+    }
+
+    return res.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+    console.error('Error logging in:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
