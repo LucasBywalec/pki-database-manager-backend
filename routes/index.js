@@ -179,6 +179,8 @@ router.post('/register', async (req, res, next) => {
   try {
     const { email, password, repassword, firstname, lastname } = req.body.data;
 
+    console.log(req.body.data);
+
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already exists' });
@@ -189,10 +191,10 @@ router.post('/register', async (req, res, next) => {
     }
 
     const newUser = await User.create({
-      email,
-      password,
-      firstname,
-      lastname,
+      email: email,
+      password: password,
+      firstName: firstname,
+      lastName: lastname,
     });
 
     return res.status(201).json(newUser);
@@ -205,7 +207,8 @@ router.post('/register', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
   try {
     const { email, password } = req.body.data;
-    console.log(email, password)
+
+    console.log(req.body.data);
 
     const user = await User.findOne({ where: { email } });
 

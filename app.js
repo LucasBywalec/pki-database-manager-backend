@@ -15,7 +15,7 @@ var indexRouter = require('./routes/index')
 var app = express();
 app.use(bodyParser.json());
 const corsOptions = {
-  origin: 'http://localhost:5174', 
+  origin: ['http://localhost:5174', 'https://pki-database-manager-frontend.vercel.app', 'http://localhost:5173'] 
 };
 app.use(cors(corsOptions));
 
